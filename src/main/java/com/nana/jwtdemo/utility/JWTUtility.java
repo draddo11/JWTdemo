@@ -1,5 +1,7 @@
 package com.nana.jwtdemo.utility;
 
-public class JWTUtility {
+import java.io.Serializable;
+
+public class JWTUtility implements Serializable {
 
 }
