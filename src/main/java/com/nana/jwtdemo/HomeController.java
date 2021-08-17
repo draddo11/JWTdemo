@@ -4,9 +4,13 @@ import com.nana.jwtdemo.models.JwtRequest;
 import com.nana.jwtdemo.models.JwtResponse;
 import com.nana.jwtdemo.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +23,7 @@ public class HomeController {
     private MyUserDetailsService userDetailsService;
 
     @Autowired
-     private JwtUtility jwtUtility;
+    private JwtUtility jwtUtility;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -27,23 +31,61 @@ public class HomeController {
     @Autowired
 
     @GetMapping("/")
-    public String home(){
+    public String home() {
         return "Welcome to JWT Tutorial";
     }
 
     @PostMapping("/authenticate")
-    public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        jwtRequest.getUsername(),
-                        jwtRequest.getPassword()
-                )
-        );
+    public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception {
 
-    }catch (BadCredentialsException e) {
-        throw new Exception("Invalid Credential".e);
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            jwtRequest.getUsername(),
+                            jwtRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Invalid Credentials", e);
+        }
+
+        final UserDetails userDetails
+                = myUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
+
+        final String token =
+                jwtUtility.generateToken(userDetails);
+
+        return new JwtResponse(token);
     }
-    final UserDetails userDetails=
-            userDetailsService.loadUserByUsername(jwtRequest.getUsername());
-   }
+
 }
+
+
+
+
+
+
+
+
+
+
+//    @PostMapping("/authenticate")
+//    public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception {
+//        try (authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        jwtRequest.getUsername(),
+//                        jwtRequest.getPassword()
+//                )
+//        );
+//
+//    }catch (BadCredentialsException e) {
+//        throw new Exception("Invalid Credential".e);
+//    };
+//    final UserDetails userDetails=
+//            userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+//    final String token =
+//            jwtUtility.generatedToken(userDetails);
+//    return new JwtResponse(token);
+//   };
+//
+//}
