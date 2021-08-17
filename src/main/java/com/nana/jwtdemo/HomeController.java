@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private JwtUtility jwtUtility;
@@ -66,24 +66,3 @@ public class HomeController {
 
 
 
-
-//    @PostMapping("/authenticate")
-//    public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception {
-//        try (authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        jwtRequest.getUsername(),
-//                        jwtRequest.getPassword()
-//                )
-//        );
-//
-//    }catch (BadCredentialsException e) {
-//        throw new Exception("Invalid Credential".e);
-//    };
-//    final UserDetails userDetails=
-//            userDetailsService.loadUserByUsername(jwtRequest.getUsername());
-//    final String token =
-//            jwtUtility.generatedToken(userDetails);
-//    return new JwtResponse(token);
-//   };
-//
-//}
