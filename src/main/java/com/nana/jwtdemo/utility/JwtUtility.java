@@ -1,17 +1,20 @@
 package com.nana.jwtdemo.utility;
-
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.userdetails.UserDetails;
+        import io.jsonwebtoken.Jwts;
+        import io.jsonwebtoken.SignatureAlgorithm;
+        import org.springframework.security.core.userdetails.UserDetails;
+        import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+        import java.io.Serializable;
+        import java.util.Date;
+        import java.util.HashMap;
+        import java.util.Map;
+        import java.util.function.Function;
 
-public class JWTUtility implements Serializable {
+@Component
+public class JwtUtility implements Serializable {
+
+
     private static final long serialVersionUID = -2550185165626007488L;
 
     public static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60;
@@ -61,4 +64,6 @@ public class JWTUtility implements Serializable {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
 }
