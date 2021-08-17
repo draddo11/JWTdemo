@@ -5,6 +5,7 @@ import com.nana.jwtdemo.models.JwtResponse;
 import com.nana.jwtdemo.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,12 @@ public class HomeController {
                         jwtRequest.getUsername(),
                         jwtRequest.getPassword()
                 )
-        )
+        );
 
+    }catch (BadCredentialsException e) {
+        throw new Exception("Invalid Credential".e);
     }
+    final UserDetails userDetails=
+            userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+   }
 }
